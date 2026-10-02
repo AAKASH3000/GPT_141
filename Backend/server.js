@@ -3,6 +3,8 @@ import "dotenv/config";
 import cors from "cors";
 import mongoose from "mongoose";
 
+import chatRoutes from "./routes/chat.js";
+
 //------
 //DNS
 import dns from 'dns';
@@ -17,6 +19,9 @@ const PORT=8080;
 app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cors());
+
+app.use("/api/chat",chatRoutes);
+
 
 
 app.listen(PORT,()=>{
