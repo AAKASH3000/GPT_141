@@ -43,11 +43,11 @@ router.get("/threads/:threadsId",async(req,res)=>{
    try{
       // const threadId = req.params.threadsId;
       const {threadId}=req.params;
-      const thread = await Thread.findById(threadId);
+      const thread = await Thread.findOne({threadId});
       if(!thread){
-         return res.status(404).json({error:"Thread  not found"});
+         return res.status(404).json({error:"Thread not found"});
       }
-      res.json(thread);
+      res.json(thread.messages);
    }catch(error){
       console.log(error);
       res.status(500).json({error:"Failed to fetch thread"});
