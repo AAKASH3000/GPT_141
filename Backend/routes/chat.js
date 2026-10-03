@@ -28,6 +28,7 @@ router.post("/test", async (req, res) => {
    }
 });
 
+//all threads fetch route
 router.get("/threads",async(req,res)=>{
    try{
       const threads = await Thread.find({}).sort({updatedAt:-1});
@@ -39,6 +40,7 @@ router.get("/threads",async(req,res)=>{
    }
 });
 
+// simgle thread fetch route
 router.get("/threads/:threadsId",async(req,res)=>{
    try{
       // const threadId = req.params.threadsId;
@@ -52,6 +54,21 @@ router.get("/threads/:threadsId",async(req,res)=>{
       console.log(error);
       res.status(500).json({error:"Failed to fetch thread"});
    }
+});
+
+//delete thread route
+router.delete("/threads/:threadId",async(req,res)=>{
+     try{
+         const {threadId}=req.params;
+         const deletedThread = await Thread.findOneAndDelete({threadId});
+         if(!deletedThread){
+            return res.status(404).json({error:"Thread not found"});
+         }
+         res.status(200).json({message:"Thread deleted successfully"});
+     }catch(error){
+         console.log(error);
+         res.status(500).json({error:"Failed to delete thread"});
+     }
 });
 
 
