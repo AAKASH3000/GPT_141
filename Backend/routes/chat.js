@@ -3,50 +3,22 @@ import Thread from "../model/Thread.js"
 
 const router = express.Router();
 
-router.post("/test2",async(req,res)=>{
-   try{
-      let data = await Thread.find();
-      res.json(data);
-      console.log(data);
-   }catch(error){
-      console.log(error);
-      res.status(500).json({error: "Failed to create thread"});
-   }
-})
+
+//test route to create a new thread
 
 router.post("/test", async (req, res) => {
-   //   try {
-   //      const { userId, message } = req.body;
-   //      const newThread = new Thread({
-   //          userId,
-   //          message
-   //      });
-   //      await newThread.save();
-   //      res.status(201).json(newThread);
-   //  } catch (error) {
-   //      res.status(500).json({ error: "Failed to create thread" });
-   //  }
-
-   // try{
-   //    let data = await Thread.find();
-   //    res.json(data);
-   //    res.send("Thread created successfully");
-   //    console.log(data);
-   // }catch(error){
-   //    console.log(error);
-   //    res.status(500).json({error: "Failed to create thread"});
-   // }
-
+  
    try{
       const thread=new Thread({
-         threadId: "xyz12346",
-         title:"sample thesting 464"
+         threadId: "xyz77854",
+         title:"sample2 thesting 43564"
       });
 
-      thread.save().then(ress=>console.log(ress));
+      // thread.save().then(ress=>console.log(ress));
 
-      // const data = await thread.save();
-      // console.log(data);
+      const data = await thread.save();
+      console.log(data);
+      res.json({message:"TThreads created successfully", data:data})
       
 
    }catch(error){{
@@ -55,6 +27,17 @@ router.post("/test", async (req, res) => {
    }
    }
 });
+
+router.get("/threads",async(req,res)=>{
+   try{
+      const threads = await Thread.find({}).sort({updatedAt:-1});
+      //descending order based on updatedAt...most recent threads will be at the top
+      res.json(threads);
+   }catch(error){
+      console.log(error);
+      res.status(500).json({error:"Failed to fetch threads"});
+   }
+})
 
 
 export default router;

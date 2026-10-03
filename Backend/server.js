@@ -20,7 +20,7 @@ app.use(express.urlencoded({extended:true}));
 app.use(express.json());
 app.use(cors());
 
-app.use("/api/chat",chatRoutes);
+app.use("/api",chatRoutes);
 
 
 
