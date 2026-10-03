@@ -37,7 +37,22 @@ router.get("/threads",async(req,res)=>{
       console.log(error);
       res.status(500).json({error:"Failed to fetch threads"});
    }
-})
+});
+
+router.get("/threads/:threadsId",async(req,res)=>{
+   try{
+      // const threadId = req.params.threadsId;
+      const {threadId}=req.params;
+      const thread = await Thread.findById(threadId);
+      if(!thread){
+         return res.status(404).json({error:"Thread  not found"});
+      }
+      res.json(thread);
+   }catch(error){
+      console.log(error);
+      res.status(500).json({error:"Failed to fetch thread"});
+   }
+});
 
 
 export default router;
