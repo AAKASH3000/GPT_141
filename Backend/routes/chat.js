@@ -71,6 +71,43 @@ router.delete("/threads/:threadId",async(req,res)=>{
      }
 });
 
+//add and fetch thread messages route
+router.post("/chat",async(req,res)=>{
+
+   const {threadId,message} = req.body;
+   if(!threadId || !message){
+      res.status(400).json({error:"threadId and message are required"});
+   }
+
+   try{
+   
+      let thread = await Thread.findOne({threadId});
+      if(!thread){
+         //create a new thread in the db
+         thread = new Thread({
+            threadId,
+            title:message,
+            messages:[{
+               role:"user",
+               content:message
+            }]
+         })
+      }else{
+         // if thread id exists, add the new message to the existing thread
+         thread.messages.push({
+            role:"user",
+            content:message
+         })
+      }
+
+      // await thread.save();
+
+   }catch(error){
+      console.log(error);
+      res.status(500).json({error: "Failed to add message to thread"});
+   }
+})
+
 
 export default router;
 
