@@ -11,7 +11,7 @@ router.post("/test", async (req, res) => {
   
    try{
       const thread=new Thread({
-         threadId: "xyz77854",
+         threadId: "xyz54",
          title:"sample2 thesting 43564"
       });
 
@@ -24,7 +24,7 @@ router.post("/test", async (req, res) => {
 
    }catch(error){{
       console.log(error);
-      res.status(500).json.json({error: "Failed to create thread"});
+      res.status(500).json({error: "Failed to create thread"});
    }
    }
 });
@@ -101,7 +101,17 @@ router.post("/chat",async(req,res)=>{
          });
       }
 
-      // await thread.save();
+      //get the response from openai api
+      const assistantReply = await getOpenAIAPIResponse(message);
+      thread.messages.push({
+         role:"assistant",
+         content:assistantReply
+      });
+      thread.updatedAt = Date.now();
+      await thread.save();
+
+      //send the response back to the client
+      res.json({reply:assistantReply});
 
    }catch(error){
       console.log(error);
