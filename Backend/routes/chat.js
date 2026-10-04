@@ -1,5 +1,6 @@
 import express from "express";
 import Thread from "../model/Thread.js"
+import getOpenAIAPIResponse from "../utils/openai.js";
 
 const router = express.Router();
 
@@ -91,13 +92,13 @@ router.post("/chat",async(req,res)=>{
                role:"user",
                content:message
             }]
-         })
+         });
       }else{
          // if thread id exists, add the new message to the existing thread
          thread.messages.push({
             role:"user",
             content:message
-         })
+         });
       }
 
       // await thread.save();
