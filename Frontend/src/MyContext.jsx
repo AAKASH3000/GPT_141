@@ -1,16 +1,13 @@
-import { createContext } from "react";
+import{createContext,useState} from "react";
 
-export const UserContext = createContext();
+export const userContext = createContext();
 
-export function MyContext({children}) {
-     let ss = {
-        name:"akash",
-        age:22
-     }
-
+export function MyContext(props) {
+    let[count,setCount] = useState(0);
+   
     return (
-        <UserContext.Provider value={ss}>
-            {children}
-        </UserContext.Provider>
+        <userContext.Provider value={{count,setCount}}>
+           {props.children}
+        </userContext.Provider>
     )
 }
