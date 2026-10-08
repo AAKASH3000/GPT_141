@@ -1,14 +1,13 @@
-import './App.css'
-import Test from './Test';
+import './App.css';
+import Chat from './Chat';
 
+import { MyContext } from './MyContext';
 function App() {
-
   return (
-    <>
-      <Test />
-     
-    </>
+    <MyContext>
+       <Chat></Chat>
+    </MyContext>
   )
 }
 
-export default App
+export default App;
