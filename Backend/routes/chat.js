@@ -1,131 +1,112 @@
-import express from "express";
-import Thread from "../model/Thread.js"
+import express from 'express';
+import Thread from "../models/Thread.js"
 import getOpenAIAPIResponse from "../utils/openai.js";
 
 const router = express.Router();
 
-
-//test route to create a new thread
-
-router.post("/test", async (req, res) => {
+//test
+router.post("/test",async (req,res)=>{
+    try{
+        const thread = new Thread({
+            threadId:"abc",
+            title:"Testing New Thread2",
+        });
   
-   try{
-      const thread=new Thread({
-         threadId: "xyz54",
-         title:"sample2 thesting 43564"
-      });
+        const responce = await thread.save();
+        res.send(responce);
 
-      // thread.save().then(ress=>console.log(ress));
-
-      const data = await thread.save();
-      console.log(data);
-      res.json({message:"TThreads created successfully", data:data})
-      
-
-   }catch(error){{
-      console.log(error);
-      res.status(500).json({error: "Failed to create thread"});
-   }
-   }
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: "Failed to save in DB"})
+    }
 });
 
-//all threads fetch route
-router.get("/threads",async(req,res)=>{
+//Get all thread
+router.get("/thread", async(req,res)=>{
    try{
-      const threads = await Thread.find({}).sort({updatedAt:-1});
-      //descending order based on updatedAt...most recent threads will be at the top
+      const threads = await thread.find({}).sort({updatedAt: -1});
+      //decending order of updateAt...most recent data on top
       res.json(threads);
-   }catch(error){
-      console.log(error);
-      res.status(500).json({error:"Failed to fetch threads"});
+   }catch(err){
+    console.log(err);
+    res.status(500).json({error: "Failed to fetch threads"});
    }
 });
 
-// simgle thread fetch route
-router.get("/threads/:threadsId",async(req,res)=>{
-   try{
-      // const threadId = req.params.threadsId;
-      const {threadId}=req.params;
-      const thread = await Thread.findOne({threadId});
-      if(!thread){
-         return res.status(404).json({error:"Thread not found"});
-      }
-      res.json(thread.messages);
-   }catch(error){
-      console.log(error);
-      res.status(500).json({error:"Failed to fetch thread"});
-   }
-});
-
-//delete thread route
-router.delete("/threads/:threadId",async(req,res)=>{
-     try{
-         const {threadId}=req.params;
-         const deletedThread = await Thread.findOneAndDelete({threadId});
-         if(!deletedThread){
-            return res.status(404).json({error:"Thread not found"});
-         }
-         res.status(200).json({message:"Thread deleted successfully"});
-     }catch(error){
-         console.log(error);
-         res.status(500).json({error:"Failed to delete thread"});
-     }
-});
-
-//add and fetch thread messages route
-router.post("/chat",async(req,res)=>{
-
-   const {threadId,message} = req.body;
-   if(!threadId || !message){
-      res.status(400).json({error:"threadId and message are required"});
-   }
+//Get thread by ID
+router.get("/thread/:threadId",async (req,res)=>{
+    const {threadId} = req.params;
 
    try{
-   
-      let thread = await Thread.findOne({threadId});
-      if(!thread){
-         //create a new thread in the db
-         thread = new Thread({
-            threadId,
-            title:message,
-            messages:[{
-               role:"user",
-               content:message
-            }]
-         });
-      }else{
-         // if thread id exists, add the new message to the existing thread
-         thread.messages.push({
-            role:"user",
-            content:message
-         });
-      }
+        const thread = await thread.findOne({threadId});
 
-      //get the response from openai api
-      const assistantReply = await getOpenAIAPIResponse(message);
-      thread.messages.push({
-         role:"assistant",
-         content:assistantReply
-      });
-      thread.updatedAt = Date.now();
-      await thread.save();
+        if(!thread){
+            res.status(404).json({error: "Thread is not found"});
+        }
 
-      //send the response back to the client
-      res.json({reply:assistantReply});
-
-   }catch(error){
-      console.log(error);
-      res.status(500).json({error: "Failed to add message to thread"});
+        res.json(thread.message);
+   }catch(err){
+        console.log(err);
+        res.status(500).json({error: "Failed to fetch threads"});
    }
 })
 
+//Delete thread by ID
+router.delete("/thread/:threadId",async (req,res)=>{
+    let {threadId} = req.params;
+
+    try{
+        const deletedThread = await Thread.findOneAndDelete(threadId);
+
+        if(!deletedThread){
+            res.status(404).json({error: "Thread is not found"});
+        }
+
+        res.status(200).json({success: "Thread deleted successfully"});
+
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: "Failed to delete thread"})
+    }
+});
+
+
+// response fetch from open ai api 
+router.post("/chat",async(req,res)=>{
+    const {threadId, message}=req.body;
+
+    if(!threadId || !message){
+           res.status(400).json({error: "missing requierd fields"});    
+    }
+
+    try{
+        let thread = await Thread.findOne({threadId});
+        if(!thread){
+            //creat a new thread in DB
+            thread = new Thread({
+                threadId,
+                title: message,
+                messages: [{role:"user", content :message}]
+            });
+        }else{
+            //**
+            thread.messages.push({role:"user", content: message});
+        }
+
+        const assistantReply = await getOpenAIAPIResponse(message);
+
+        thread.messages.push({role:"assistant", content: assistantReply});
+        thread.updatedAt = new Date();
+
+        await thread.save();
+
+        //send responce
+        res.json({reply: assistantReply});
+
+    }catch(err){
+        console.log(err);
+        res.status(500).json({error: "something went wrong" });
+    }
+});
 
 export default router;
-
-
-
-
-
-
-
-
