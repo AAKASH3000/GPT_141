@@ -1,26 +1,37 @@
-import './App.css';
+import "./App.css";
 import Sidebar from "./Sidebar";
-import ChatWindow from './ChatWindow';
-
-import { MyContext } from './MyContext';
-import { useState } from 'react';
+import ChatWindow from "./ChatWindow";
+import { MyContext } from "./MyContext"; 
+import { useState } from "react";
+import { v1 as uuidv1 } from "uuid";
 
 function App() {
 
-   let[inputM,setInputM] =useState();
+  const [prompt,setPrompt] = useState("");
+  const [reply, setReply] = useState(null);
+  const [currThreadId, setCurrThreadId] = useState(uuidv1());
+  const [prevChats, setPrevChats] = useState([]);
+  const [newChat, setNewChat] = useState(true);
 
-  const providerValue = {
-     inputM, setInputM
+
+   //passing value
+  const providerValue={
+     prompt,setPrompt,
+     reply,setReply,
+     currThreadId,setCurrThreadId,
+     prevChats,setPrevChats,
+     newChat,setNewChat
   };
 
   return (
     <div className="app">
       <MyContext.Provider value={providerValue}>
-        <Sidebar></Sidebar>
-        <ChatWindow></ChatWindow>
+        <Sidebar />
+        <ChatWindow />
       </MyContext.Provider>
-    </ div>
+    </div>
   )
 }
 
-export default App;
+export default App
+

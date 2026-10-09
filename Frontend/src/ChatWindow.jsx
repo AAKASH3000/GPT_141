@@ -4,13 +4,31 @@ import { useContext, useState } from "react"
 import { MyContext } from "./MyContext.jsx";
 
 export default function ChatWindow() {
-   const [msg, setMsg]=useState("");
-   
-   const {inputM, setInputM} = useContext(MyContext);
+    
+   const {prompt,setPrompt,reply,setReply} = useContext(MyContext);
 
-   const  handelInput =(e)=>{
-     setMsg(e.target.value);
+   const getReply= async()=>{
+        const options ={
+            method:"POST",
+            heders:{
+                "Content-Type":"appliction/json"
+            },
+            body:JSON.stringify({
+                message:prompt,
+                threadId:currThread
+            })
+        };
+
+        try{
+            const response = await fetch("http://localhost:8080/api/chat",options);
+            const res =await response.json();
+            console.log(res);
+            setReply(res.reply);
+        }catch(error) {
+            console.log(error)
+        }
    }
+   
     return(
         <div className="chatWindow">
             <div className="navbar">
@@ -22,16 +40,17 @@ export default function ChatWindow() {
             <Chat></Chat>
 
             <div className="chatInput">
-                  <div className="userInput">
-                     <input 
-                        placeholder="Ask anything"
-                        value={msg}
-                        onChange={handelInput}
-                     />
-                     <button></button>
+               <div className="inputBox">
+                  <input placeholder="Ask anything" 
+                     value={prompt}
+                     onChange={(event)=>setPrompt(event.target.value)}
+                  />
+                  <div id="submit" onClick={getReply()}>
+                    <i className="fa-solid fa-paper-plane"></i>
                   </div>
-                  <p className="info">ThinkFlow can make mistakes. Check important info. See Cookie Preferences.</p>
-            </div>
+               </div>
+               <p className="info">ThinkFlow can make mistakes. Check important info. See Cookie Preferences.</p>
+           </div>
         </div>
     )
 }
