@@ -3,10 +3,15 @@ import Sidebar from "./Sidebar";
 import ChatWindow from './ChatWindow';
 
 import { MyContext } from './MyContext';
+import { useState } from 'react';
 
 function App() {
 
-  const providerValue = {};
+   let[inputM,setInputM] =useState();
+
+  const providerValue = {
+     inputM, setInputM
+  };
 
   return (
     <div className="app">
