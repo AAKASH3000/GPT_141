@@ -12,6 +12,8 @@
   "dependencies": {
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
+    "react-spinners": "^0.17.1",
+    "react-spring": "^10.0.4",
     "uuid": "^14.0.2"
   },
   "devDependencies": {

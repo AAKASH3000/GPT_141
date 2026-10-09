@@ -2,7 +2,7 @@ import "./ChatWindow.css";
 import Chat from "./Chat";
 import { MyContext } from "./MyContext";
 import { useContext, useState } from "react";
-
+import { ClipLoader, ScaleLoader } from "react-spinners";
 
 
 function ChatWindow(){
@@ -49,7 +49,9 @@ function ChatWindow(){
            </div>
            <Chat></Chat>
 
-          
+           <ScaleLoader color="#fff" loading={loading}>
+
+           </ScaleLoader>
 
            <div className="chatInput">
                <div className="inputBox">
