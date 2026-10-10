@@ -10,7 +10,7 @@ function App() {
   const [prompt,setPrompt] = useState("");
   const [reply, setReply] = useState(null);
   const [currThreadId, setCurrThreadId] = useState(uuidv1());
-  const [prevChats, setPrevChats] = useState([]);
+  const [prevChats, setPrevChats] = useState([]); //store all chats of curr threads
   const [newChat, setNewChat] = useState(true);
 
 
