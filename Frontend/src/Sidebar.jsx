@@ -12,10 +12,11 @@ export default function Sidebar(){
         try {
             const response = await fetch("http://localhost:8080/api/thread");
             const res = await response.json();
-            // const filteredData = res.map(thread => ({threadId: thread.threadId, title: thread.title}));
-            // //console.log(filteredData);
-            // setAllThreads(filteredData);
-            console.log(res);
+            //extract threadId and title
+            const filteredData = res.map(thread => ({threadId: thread.threadId, title: thread.title}));
+            console.log(filteredData);
+            setAllThreads(filteredData);
+           
         } catch(err) {
             console.log(err);
         }
@@ -23,7 +24,7 @@ export default function Sidebar(){
 
     useEffect(() => {
         getAllThreads();
-    }, [currThreadId])
+    }, [])
     
     return (
         <section className="sidebar">
@@ -36,13 +37,13 @@ export default function Sidebar(){
             {/* history */}
 
             <ul className="history">
-                {/* {allThreads.map((el,idx)=>(
-                    <li key={idx}>{el.messages.role === "user"?el.messages.content: null}</li>
-                ))} */}
+               {
+                allThreads?.map((thread, idx)=>{
+                    return <li key={idx}>{thread.title}</li>
+                })
+               }
 
-                <li>thread1</li>
-                <li>thread2</li>
-                <li>thread3</li>
+              
             </ul>
 
             {/* sign */}
