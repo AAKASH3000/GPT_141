@@ -1,12 +1,13 @@
 import "./Sidebar.css";
 import { useContext, useEffect } from "react";
 import { MyContext } from "./MyContext";
+import { v1 as uuidv1 } from "uuid";
 
 
 
 export default function Sidebar(){
 
-    const {allThreads, setAllThreads,reply, currThreadId} = useContext(MyContext);
+    const {allThreads, setAllThreads, setNewChat, setPrompt, setReply, currThreadId, setCurrThreadId, setPrevChats} = useContext(MyContext);
 
      const getAllThreads = async () => {
         try {
@@ -24,12 +25,21 @@ export default function Sidebar(){
 
     useEffect(() => {
         getAllThreads();
-    }, [])
+    }, [currThreadId]);
+
+    const createNewChat =()=>{
+        setNewChat(true);
+        setPrompt("");
+        setReply(null);
+        setCurrThreadId(uuidv1());
+        setPrevChats([]);
+    }
+
     
     return (
         <section className="sidebar">
             {/* new chat button */}
-            <button>
+            <button onClick={createNewChat}>
                 <img src="src\assets\blacklogo.png" alt="gpt logo" className="logo" />
                 <span><i className="fa-solid fa-pen-to-square"></i></span>  
             </button>
