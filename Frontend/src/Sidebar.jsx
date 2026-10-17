@@ -50,6 +50,23 @@ export default function Sidebar(){
         }
     }   
 
+    const deleteThread= async(threadId)=>{
+         try {
+            const response = await fetch(`http://localhost:8080/api/thread/${threadId}`,{method:"DELETE"});
+            const res = await response.json();
+            console.log(res);
+            
+            setPrevChats((prev)=>(
+                prev.filter((thread)=>thread.threadId!==threadId)
+            ));
+
+            
+            
+         } catch (error) {
+            console.log(error);
+         }
+    }
+
     
     return (
         <section className="sidebar">
@@ -66,7 +83,14 @@ export default function Sidebar(){
                 allThreads?.map((thread, idx)=>(
                     <li key={idx} 
                       onClick={()=>changeThread(thread.threadId)}
-                    >{thread.title}</li>
+                    >{thread.title}
+                    <i className="fa-solid fa-trash"
+                      onClick={(e)=>{
+                        e.stopPropagation(); // stop event bubbling
+                        deleteThread(thread.threadId);
+                      }}
+                    ></i>
+                    </li>
                 ))
                }
 
