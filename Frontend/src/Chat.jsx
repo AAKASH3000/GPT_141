@@ -9,9 +9,16 @@ export default function Chat() {
 
     const {newChat, prevChats, reply} = useContext(MyContext);
     const [latestReply, setLatestReply] = useState(null);
-
+    
 
     useEffect(() => {
+ 
+        //we don't want typing effect when we fetch old chat
+        if(reply == null){
+            setLatestReply(null);
+            return;
+        }
+
         // latestReply separate => typing effect create
         if (!prevChats?.length || !reply) return;
 
@@ -44,11 +51,37 @@ export default function Chat() {
             }
 
             {
+                    prevChats.length > 0  && (
+                        <>
+                            {
+                                latestReply === null ? (
+                                <div className="gptDiv" key={"non-typing"} >
+                                    <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{prevChats[prevChats.length-1].content}</ReactMarkdown>
+                                </div>
+                                ) : (
+                                <div className="gptDiv" key={"typing"} >
+                                    <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{latestReply}</ReactMarkdown>
+                                </div>
+                                )
+
+                            }
+                        </>
+                    )
+            }
+
+            {/* {
                 prevChats.length > 0 && latestReply !==null &&
                 <div className="gptDiv" key={"typing"}>
                     <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{latestReply}</ReactMarkdown>
                 </div>
             }
+            {
+                //if we want old chat to print but earlier we saperated the last response from GPT for typing effect but now we don't want the typing effect that's way we add this line of code to display the last response from the gpt
+                prevChats.length > 0 && latestReply ===null &&
+                <div className="gptDiv" key={"typing"}>
+                    <ReactMarkdown rehypePlugins={[rehypeHighlight]}>{prevChats[prevChats.length-1].content}</ReactMarkdown>
+                </div>
+            } */}
             
         </div>
         </>
