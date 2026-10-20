@@ -9,6 +9,7 @@ function ChatWindow(){
 
     const {prompt, setPrompt, reply, setReply, currThreadId, prevChats, setPrevChats, setNewChat} = useContext(MyContext); 
     const [loading, setLoading] = useState(false);
+    const [isOpen, setIsOpen] = useState(true);
 
     const getReply = async ()=>{
         setLoading(true);
@@ -57,7 +58,11 @@ function ChatWindow(){
          }
 
          setPrompt("");
-    },[reply])
+    },[reply]);
+
+    const show = ()=>{
+        setIsOpen(el=>!el);
+    }
 
 
     return(
@@ -65,9 +70,19 @@ function ChatWindow(){
            <div className="navbar">
                 <span>ThinkFlow  <i className="fa-solid fa-angle-down"></i></span>
                 <div className="userIconDiv">
-                    <span className="userIcon" ><i className="fa-solid fa-user"></i></span>
+                    <span className="userIcon" ><i onClick={show} className="fa-solid fa-user"></i></span>
                 </div>
            </div>
+           {
+            isOpen && 
+            <div className="dropDown">
+                <div className="dropDownItem">item1</div>
+                <div className="dropDownItem">item1</div>
+                <div className="dropDownItem">item1</div>
+                <div className="dropDownItem">item1</div>
+            </div>
+            
+           }
            <Chat></Chat>
 
            <ScaleLoader color="#fff" loading={loading}>
