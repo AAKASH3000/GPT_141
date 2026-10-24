@@ -80,10 +80,6 @@ function ChatWindow(){
                 <div className="dropDownItem">item1</div>
                 <div className="dropDownItem">item1</div>
                 <div className="dropDownItem">item1</div>
-                <div className="dropDownItem">item1</div>
-                <div className="dropDownItem">item1</div>
-                <div className="dropDownItem">item1</div>
-                <div className="dropDownItem">item1</div>
             </div>
             
            }
