@@ -9,7 +9,7 @@ function ChatWindow(){
 
     const {prompt, setPrompt, reply, setReply, currThreadId, prevChats, setPrevChats, setNewChat} = useContext(MyContext); 
     const [loading, setLoading] = useState(false);
-    const [isOpen, setIsOpen] = useState(true);
+    const [isOpen, setIsOpen] = useState(false);
 
     const getReply = async ()=>{
         setLoading(true);
@@ -60,7 +60,7 @@ function ChatWindow(){
          setPrompt("");
     },[reply]);
 
-    const show = ()=>{
+    const handleProfileClick = ()=>{
         setIsOpen(el=>!el);
     }
 
@@ -69,17 +69,16 @@ function ChatWindow(){
         <div className="chatWindow">
            <div className="navbar">
                 <span>ThinkFlow  <i className="fa-solid fa-angle-down"></i></span>
-                <div className="userIconDiv">
-                    <span className="userIcon" ><i onClick={show} className="fa-solid fa-user"></i></span>
+                <div className="userIconDiv" onClick={handleProfileClick}>
+                    <span className="userIcon" ><i  className="fa-solid fa-user"></i></span>
                 </div>
            </div>
            {
             isOpen && 
             <div className="dropDown">
-                <div className="dropDownItem">item1</div>
-                <div className="dropDownItem">item1</div>
-                <div className="dropDownItem">item1</div>
-                <div className="dropDownItem">item1</div>
+                <div className="dropDownItem"><i class="fa-solid fa-gear"></i> Settings</div>
+                <div className="dropDownItem"><i class="fa-solid fa-cloud-arrow-up"></i> Upgrade plan</div>
+                <div className="dropDownItem"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</div>
             </div>
             
            }
