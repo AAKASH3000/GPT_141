@@ -20,7 +20,7 @@ const PORT= process.env.PORT || 8080;
 app.use(express.json());
 app.use(
   cors({
-    origin: "gpt-141.vercel.app",
+    origin: "https://gpt-141.vercel.app/",
     credentials: true,
   })
 );
