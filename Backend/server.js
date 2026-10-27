@@ -15,10 +15,15 @@ dns.setServers(["1.1.1.1", "8.8.8.8"]);
 //------
 
 const app=express();
-const PORT=8080;
+const PORT= process.env.PORT || 8080;
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  })
+);
 
 app.use("/api",chatRoute);
 
@@ -26,6 +31,11 @@ app.listen(8080,()=>{
     console.log(`server running on ${PORT}`);
     connectDB();
 });
+
+// //for render
+// setInterval(() => {
+//   console.log("This function runs every 15 minutes");
+// }, 15 * 60 * 1000);
 
 const connectDB = async() => {
   try{
